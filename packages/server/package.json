@@ -10,10 +10,14 @@
   "author": "Quramy",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^3.0.3"
+    "javascript-typescript-langserver": "^2.11.1",
+    "typescript": "^3.0.3",
+    "typescript-language-server": "^0.3.2"
   },
   "dependencies": {
+    "@types/express": "^4.16.0",
     "@types/node": "^10.9.4",
+    "express": "^4.16.3",
     "vscode-languageserver-protocol": "^3.12.0"
   }
 }
