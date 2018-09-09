@@ -1,0 +1,4 @@
+# Inspectorium
+
+# License
+MIT

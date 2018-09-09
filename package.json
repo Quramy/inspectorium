@@ -1,0 +1,19 @@
+{
+  "name": "inspectorium",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Source code inspection",
+  "main": "index.js",
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Quramy",
+  "license": "MIT",
+  "devDependencies": {
+    "lerna": "^3.3.0",
+    "typescript": "^3.0.3"
+  },
+  "workspaces": ["packages/*"]
+}
