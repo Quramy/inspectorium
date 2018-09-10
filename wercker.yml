@@ -10,6 +10,11 @@ build:
       name: install dependencies
       code: |
         HOME=$YARN_CACHE yarn --pure-lockfile
+    - script:
+      name: build
+      code: |
+        yarn bootstrap
+        yarn run tsc -p packages/server
 
 push_image:
   steps:
