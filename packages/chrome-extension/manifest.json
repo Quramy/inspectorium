@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "version": "1.0.0",
+  "name": "inspectorium-gh",
+  "description": "inspect your sources in GitHub",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [{
+    "matches": ["https://github.com/*"],
+    "js": ["contentScript.js"]
+  }],
+  "permissions": [
+    "http://*/",
+    "https://*/",
+    "background"
+  ]
+}
