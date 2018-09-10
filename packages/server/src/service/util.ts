@@ -1,0 +1,95 @@
+import path from "path";
+
+export function path2languageId(filePath: string) {
+  const ext = path.extname(filePath);
+  switch (ext) {
+    case ".bat":
+      return "bat";
+    case ".bibtex":
+      return "bibtex";
+    case ".clj":
+      return "clojure";
+    case ".coffee":
+      return "coffeescript";
+    case ".c":
+    case ".h":
+      return "c";
+    case ".cpp":
+    case ".hpp":
+      return "cpp";
+    case ".cs":
+      return "csharp";
+    case ".diff":
+      return "diff";
+    case ".fs":
+      return "fsharp";
+    case ".go":
+      return "go";
+    case ".groovy":
+      return "groovy";
+    case ".htm":
+    case ".html":
+      return "html";
+    case ".ini":
+      return "ini";
+    case ".java":
+      return "java";
+    case ".js":
+    case ".mjs":
+    case ".jsx":
+      return "javascript";
+    case ".json":
+      return "json";
+    case ".tex":
+      return "latex";
+    case ".less":
+      return "less";
+    case ".lua":
+      return "lua";
+    case ".md":
+      return "markdown";
+    case ".m":
+      return "objective-c";
+    case ".mm":
+      return "objective-cpp";
+    case ".pl":
+    case ".pm":
+      return "perl";
+    case ".php":
+      return "php";
+    case ".ps1":
+      return "powershell";
+    case ".pug":
+    case ".jade":
+      return "jade";
+    case ".py":
+      return "python";
+    case ".r":
+      return "r";
+    case ".cshtml":
+      return "razor";
+    case ".rs":
+      return "rust";
+    case ".scss":
+      return "scss";
+    case ".sh":
+      return "shellscript";
+    case ".sql":
+      return "sql";
+    case ".swift":
+      return "swift";
+    case ".ts":
+    case ".tsx":
+      return "typescript";
+    case ".vb":
+      return "vb";
+    case ".xml":
+      return "xml";
+    case ".xsl":
+      return "xsl";
+    case ".yml":
+      return "yaml";
+    default:
+      return "unknown";
+  }
+}

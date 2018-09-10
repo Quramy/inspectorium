@@ -20,9 +20,22 @@ export class WorkspaceManager {
     this.projectRoot = projectRoot;
   }
 
+  filePath2AbsPath(filePath: string) {
+    return path.join(this.projectRoot, filePath);
+  }
+
+  filePath2Uri(filePath: string) {
+    return `file://${this.filePath2AbsPath(filePath)}`;
+  }
+
+  uri2FilePath(uri: string) {
+    const absPath = uri.replace(/^file:\/\//, "");
+    return path.relative(this.projectRoot, absPath);
+  }
+
   async open(filePath: string, delegate: (documentUri: string, contents: string) => Promise<any>) {
-    const absPath = path.join(this.projectRoot, filePath);
-    const documentUri = `file://${absPath}`;
+    const absPath = this.filePath2AbsPath(filePath);
+    const documentUri = this.filePath2Uri(filePath);
     if (this.fileMap.has(documentUri)) {
       return documentUri;
     }
