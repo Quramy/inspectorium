@@ -23,6 +23,7 @@ push_image:
       code: |
         rm -rf .git
     - internal/docker-push:
+      working-dir: $WERCKER_SOURCE_DIR
       cmd: yarn start
       username: _json_key
       password: $GCR_JSON_KEY_FILE
