@@ -1,0 +1,24 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: web
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: web
+    spec:
+      containers:
+        - name: web-lang-server
+          image: asia.gcr.io/inspectorium-dev/inspectorium
+          ports:
+            - containerPort: 4000
+              protocol: TCP
+              name: http
+          imagePullPolicy: Always
