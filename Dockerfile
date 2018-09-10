@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:8-alpine
 
 RUN mkdir -p /var/repo
 COPY * /var/repo/
@@ -9,5 +9,4 @@ RUN yarn --pure-lockfile
 RUN yarn bootstrap
 RUN yarn run tsc -p packages/server
 
-EXPOSE 4000
 CMD ["yarn", "start"]
