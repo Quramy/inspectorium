@@ -17,7 +17,7 @@ push_image:
       name: remove unused files
       code: |
         rm -rf .git
-    - internal/docker-push
+    - internal/docker-push:
       cmd: yarn start
       username: _json_key
       password: $GCR_JSON_KEY_FILE
