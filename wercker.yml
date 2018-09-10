@@ -11,7 +11,17 @@ build:
       code: |
         HOME=$YARN_CACHE yarn --pure-lockfile
 
-        #deploy:
-        #  steps:
-        #    - internal/docker-push
-        #
+push_image:
+  steps:
+    - script:
+      name: remove unused files
+      code: |
+        rm -rf .git
+    - internal/docker-push
+      cmd: yarn start
+      username: _json_key
+      password: $GCR_JSON_KEY_FILE
+      tag: latest, $WERCKER_GIT_COMMIT
+      repository: asia.gcr.io/inspectorium-dev/inspectorium
+      registry: https://asia.gcr.io/v2
+
