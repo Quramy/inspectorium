@@ -30,6 +30,13 @@ app.use((req, res, next) => {
   console.log("[request]", req.method, req.path, JSON.stringify(req.headers));
   next();
 });
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
 app.use("/api/v1", createRouter({ service }));
 
 async function main() {
