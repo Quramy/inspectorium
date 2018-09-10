@@ -1,0 +1,10 @@
+
+port: 4000
+languageServer:
+  command: ./node_modules/.bin/typescript-language-server
+  args:
+    - "--stdio"
+    - "--tsserver-path"
+    - "./node_modules/.bin/tsserver"
+    - "--log-level"
+    - "3"

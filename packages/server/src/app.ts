@@ -7,6 +7,7 @@ import { InspectionService } from "./service";
 
 export type BootstrapOptions = {
   port: number,
+  projectRoot: string,
   languageServer: {
     command: string,
     args: string[],
@@ -16,7 +17,7 @@ export type BootstrapOptions = {
 export async function bootstrap(options: BootstrapOptions) {
   const app = express();
   
-  const prjPath = path.resolve(path.join(__dirname, "../../.."));
+  const prjPath = path.resolve(options.projectRoot);
   const client = new LspClient(options.languageServer);
   
   const wsManager = new WorkspaceManager({

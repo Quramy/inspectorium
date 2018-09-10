@@ -1,5 +1,6 @@
 
 port: 4000
+projectRoot: "../../"
 languageServer:
   command: ../../node_modules/.bin/typescript-language-server
   args:

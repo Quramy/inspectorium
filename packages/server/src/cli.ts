@@ -20,7 +20,11 @@ function main() {
   }
   const config = require("js-yaml").safeLoad(fs.readFileSync(configFilename, "utf8"));
 
-  bootstrap(config);
+  bootstrap({
+    port: 4000,
+    projectRoot: process.cwd(),
+    ...config
+  });
 
 }
 

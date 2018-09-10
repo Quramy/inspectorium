@@ -47,7 +47,7 @@ window.addEventListener("keyup", e => {
     if (!pathInfo) return;
     console.log(pos, pathInfo);
     // TODO custom endpoint
-    chrome.runtime.sendMessage({ type: "getDefinition", params: { ...pathInfo, endpoint: "http://localhost:3000", position: pos } }, (res: { path: string, range: DocumentRange }[]) => {
+    chrome.runtime.sendMessage({ type: "getDefinition", params: { ...pathInfo, endpoint: "http://localhost:4000", position: pos } }, (res: { path: string, range: DocumentRange }[]) => {
       console.log(res);
       if (!res.length) {
         // TODO handle empty result
