@@ -38,6 +38,7 @@ function getPath() {
 }
 
 window.addEventListener("keyup", e => {
+  // Ctrl + ]
   if (e.ctrlKey && e.keyCode === 221) {
     const selection = document.getSelection();
     const focusNode = selection.focusNode as HTMLElement;
