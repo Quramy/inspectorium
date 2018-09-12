@@ -3,7 +3,7 @@ const webpack = require("webpack");
 
 module.exports = {
   entry: {
-    contentScript: path.resolve(__dirname, "src/content.ts"),
+    contentScript: path.resolve(__dirname, "src/content_script/index.tsx"),
     background: path.resolve(__dirname, "src/background.ts"),
   },
   output: {

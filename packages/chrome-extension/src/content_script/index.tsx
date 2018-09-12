@@ -1,6 +1,9 @@
-import {
-  DocumentRange,
-} from "./types";
+import * as React from "react";
+import { render } from "react-dom";
+
+import { DocumentRange } from "../types";
+import { UrlChangeObserver } from "./lib/url-change";
+import RepositoryConfig from "./components/repository-config";
 
 function findPosision(node: HTMLElement, target: string): { line: number, character: number } | null {
   while (true) {
@@ -36,6 +39,26 @@ function getPath() {
     };
   }
 }
+
+function addRepositoryConfigView() {
+  const pathInfo = getPath();
+  if (!pathInfo) return;
+  const b = document.querySelector("body");
+  if (!b) {
+    throw new Error("no <body> element");
+  }
+  const c = document.createElement("div");
+  // c.innerHTML = `
+  // <p>aaaaaaaaaaaaaaaaaaaaaaaaa</p>
+  // `;
+  render(<RepositoryConfig />, c);
+  b.appendChild(c);
+}
+
+const urlChangeObserver = new UrlChangeObserver().start();
+urlChangeObserver.onChangeUrl(e => {
+  addRepositoryConfigView();
+});
 
 window.addEventListener("keyup", e => {
   // Ctrl + ]
