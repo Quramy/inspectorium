@@ -18,24 +18,27 @@ build:
 
 push_image:
   steps:
-    # - script:
-    #   name: remove unused files
-    #   code: |
-    #     rm -rf .git
-    # - internal/docker-push:
-    #   working-dir: $WERCKER_SOURCE_DIR
-    #   cmd: yarn start
-    #   username: _json_key
-    #   password: $GCR_JSON_KEY_FILE
-    #   tag: latest, $WERCKER_GIT_COMMIT
-    #   repository: asia.gcr.io/inspectorium-dev/inspectorium
-    #   registry: https://asia.gcr.io/v2
     - script:
-      name: prepare kubectl
+      name: remove unused files
       code: |
-        mkdir -p ${HOME}/.kube
-        echo ${KUBE_CONFIG} | base64 -d > ${HOME}/.kube/config
-    - kubectl:
-      command: config use-context ${KUBE_CONTEXT_NAME}
-    - kubectl:
-      command: get deployments
+        rm -rf .git
+    - internal/docker-push:
+      working-dir: $WERCKER_SOURCE_DIR
+      cmd: yarn start
+      username: _json_key
+      password: $GCP_JSON_KEY_FILE
+      tag: latest, $WERCKER_GIT_COMMIT
+      repository: asia.gcr.io/inspectorium-dev/inspectorium
+      registry: https://asia.gcr.io/v2
+
+deploy:
+  box: google/cloud-sdk
+  steps:
+    - script:
+      name: auth
+      code: |
+        echo ${GCP_JSON_KEY_FILE} > key.json
+        gcloud auth activate-service-account --key-file=key.json
+        gcloud config set project ${GCP_PROJECT_NAME}
+        gcloud container clusters get-credentials ${GKE_CLUSTER_NAME}
+        kubectl get pods
