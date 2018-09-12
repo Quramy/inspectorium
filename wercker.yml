@@ -30,7 +30,7 @@ push_image:
     #   tag: latest, $WERCKER_GIT_COMMIT
     #   repository: asia.gcr.io/inspectorium-dev/inspectorium
     #   registry: https://asia.gcr.io/v2
-    # - script:
+    - script:
       name: prepare kubectl
       code: |
         echo ${KUBE_CONFIG} | base64 --decode > ${HOME}/.kube/config
