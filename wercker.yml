@@ -41,4 +41,5 @@ deploy:
         gcloud auth activate-service-account --key-file=./key.json
         gcloud config set project ${GCP_PROJECT_NAME}
         gcloud container clusters get-credentials ${GKE_CLUSTER_NAME} --zone="${GKE_CLUSTER_ZONE}"
-        kubectl get pods
+    - kubectl:
+      command: get pods
