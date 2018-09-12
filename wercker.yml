@@ -40,7 +40,6 @@ deploy:
         apk --no-cache add gettext
         envsubst < k8s/service.tmpl.yml > k8s/service.gen.yml
         envsubst < k8s/deployment.tmpl.yml > k8s/deployment.gen.yml
-  steps:
     - script:
       name: auth
       code: |
