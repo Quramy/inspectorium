@@ -18,16 +18,23 @@ build:
 
 push_image:
   steps:
-    - script:
-      name: remove unused files
+    # - script:
+    #   name: remove unused files
+    #   code: |
+    #     rm -rf .git
+    # - internal/docker-push:
+    #   working-dir: $WERCKER_SOURCE_DIR
+    #   cmd: yarn start
+    #   username: _json_key
+    #   password: $GCR_JSON_KEY_FILE
+    #   tag: latest, $WERCKER_GIT_COMMIT
+    #   repository: asia.gcr.io/inspectorium-dev/inspectorium
+    #   registry: https://asia.gcr.io/v2
+    # - script:
+      name: prepare kubectl
       code: |
-        rm -rf .git
-    - internal/docker-push:
-      working-dir: $WERCKER_SOURCE_DIR
-      cmd: yarn start
-      username: _json_key
-      password: $GCR_JSON_KEY_FILE
-      tag: latest, $WERCKER_GIT_COMMIT
-      repository: asia.gcr.io/inspectorium-dev/inspectorium
-      registry: https://asia.gcr.io/v2
-
+        echo ${KUBE_CONFIG} | base64 --decode > ${HOME}/.kube/config
+    - kubectl:
+      command: config use-context ${KUBE_CONTEXT_NAME}
+    - kubectl:
+      command: get deployments
