@@ -4,6 +4,7 @@
     "rootDir": "src",
     "outDir": "built",
     "module": "es2015",
+    "moduleResolution": "node",
     "jsx": "react"
   }
 }
