@@ -33,6 +33,7 @@ push_image:
     - script:
       name: prepare kubectl
       code: |
+        mkdir -p ${HOME}/.kube
         echo ${KUBE_CONFIG} | base64 --decode > ${HOME}/.kube/config
     - kubectl:
       command: config use-context ${KUBE_CONTEXT_NAME}
