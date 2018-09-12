@@ -49,6 +49,6 @@ deploy:
         gcloud config set project ${GCP_PROJECT_NAME}
         gcloud container clusters get-credentials ${GKE_CLUSTER_NAME} --zone="${GKE_CLUSTER_ZONE}"
     - kubectl:
-      command: apply -f k8s/service.yml
+      command: apply -f k8s/service.gen.yml
     - kubectl:
-      command: apply -f k8s/deployment.yml
+      command: apply -f k8s/deployment.gen.yml
