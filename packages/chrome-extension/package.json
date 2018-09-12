@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "webpack": "webpack",
+    "tcm": "tcm src/content_script",
     "copy:manifest": "cp manifest.json dist",
     "build": "npm run webpack && npm run copy:manifest",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,15 +15,20 @@
   "author": "Quramy",
   "license": "MIT",
   "devDependencies": {
+    "css-loader": "^1.0.0",
     "light-ts-loader": "^1.1.2",
+    "mini-css-extract-plugin": "^0.4.2",
     "typescript": "^3.0.3",
+    "typed-css-modules": "^0.3.5",
     "webpack": "^4.17.2",
     "webpack-cli": "^3.1.0"
   },
   "dependencies": {
     "@types/chrome": "^0.0.73",
+    "@types/classnames": "^2.2.6",
     "@types/react": "^16.4.14",
     "@types/react-dom": "^16.0.7",
+    "classnames": "^2.2.6",
     "react": "^16.5.0",
     "react-dom": "^16.5.0"
   }

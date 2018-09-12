@@ -1,5 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: {
@@ -11,24 +12,31 @@ module.exports = {
     filename: "[name].js",
   },
   resolve: {
-    extensions: [".ts", ",tsx", ".js"],
+    extensions: [".ts", ".tsx", ".js"],
   },
   module: {
     rules: [
       { test: /\.tsx?$/, exclude: /node_modules/, loader: "light-ts-loader" },
-      // {
-      //   test: /\.css$/,
-      //   use: ExtractTextPlugin.extract([
-      //     {
-      //       loader: "css-loader",
-      //       options: {
-      //         modules:true,
-      //         localIdentName: env !== "prod" ? "[name]_[local]" : "[hash:base64]"
-      //       },
-      //     },
-      //     "postcss-loader"
-      //   ]),
-      // },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: "css-loader",
+            options: {
+              modules:true,
+              localIdentName: "[name]_[local]_[hash:base64]",
+            },
+          },
+        ],
+      },
     ],
   },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "contentScript.css",
+    }),
+  ],
 };
