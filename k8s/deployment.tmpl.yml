@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: web-lang-server
-          image: asia.gcr.io/inspectorium-dev/inspectorium
+          image: asia.gcr.io/${GCP_PROJECT_NAME}/inspectorium:${WERCKER_GIT_COMMIT}
           ports:
             - containerPort: 4000
               protocol: TCP
