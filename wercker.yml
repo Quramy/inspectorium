@@ -28,11 +28,18 @@ push_image:
       username: _json_key
       password: $GCP_JSON_KEY_FILE
       tag: latest, $WERCKER_GIT_COMMIT
-      repository: asia.gcr.io/inspectorium-dev/inspectorium
+      repository: asia.gcr.io/$GCP_PROJECT_NAME/inspectorium
       registry: https://asia.gcr.io/v2
 
 deploy:
   box: google/cloud-sdk:alpine
+  steps:
+    - script:
+      name: prepare template
+      code: |
+        apk --no-cache add gettext
+        envsubst < k8s/service.tmpl.yml > k8s/service.gen.yml
+        envsubst < k8s/deployment.tmpl.yml > k8s/deployment.gen.yml
   steps:
     - script:
       name: auth
@@ -42,4 +49,6 @@ deploy:
         gcloud config set project ${GCP_PROJECT_NAME}
         gcloud container clusters get-credentials ${GKE_CLUSTER_NAME} --zone="${GKE_CLUSTER_ZONE}"
     - kubectl:
-      command: get pods
+      command: apply -f k8s/service.yml
+    - kubectl:
+      command: apply -f k8s/deployment.yml
