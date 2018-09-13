@@ -8,6 +8,9 @@ import {
   InitializeResult,
   DidOpenTextDocumentParams,
   TextDocumentPositionParams,
+  Hover,
+  ReferenceParams,
+  Location,
   Definition,
 } from "vscode-languageserver-protocol";
 import { JsonRpc,  Decoder } from "./json-rpc";
@@ -50,6 +53,14 @@ export class LspClient extends EventEmitter {
 
   textDocumentDidOpen(params: DidOpenTextDocumentParams) {
     return this.sendOneWay({ method: "textDocument/didOpen", params });
+  }
+
+  textDocumentHover(params: TextDocumentPositionParams) {
+    return this.send<Hover>({ method: "textDocument/hover", params });
+  }
+
+  textDocumentReferences(params: ReferenceParams) {
+    return this.send<Location[]>({ method: "textDocument/references", params });
   }
 
   textDocumentDefinition(params: TextDocumentPositionParams) {

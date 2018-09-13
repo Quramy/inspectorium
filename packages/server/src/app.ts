@@ -15,10 +15,19 @@ export type BootstrapOptions = {
 };
 
 export async function bootstrap(options: BootstrapOptions) {
-  const app = express();
   
+  const app = express();
   const prjPath = path.resolve(options.projectRoot);
   const client = new LspClient(options.languageServer);
+
+  const initializeResult = await client.initialize({
+    processId: process.pid,
+    capabilities: { },
+    rootUri: `file://${prjPath}`,
+    rootPath: prjPath,
+    workspaceFolders: null,
+  }).wait();
+
   
   const wsManager = new WorkspaceManager({
     projectRoot: prjPath,
@@ -27,6 +36,7 @@ export async function bootstrap(options: BootstrapOptions) {
   const service = new InspectionService({
     lspClient: client,
     workspaceManager: wsManager,
+    capabilities: initializeResult.capabilities,
   });
   
   app.use((req, res, next) => {
@@ -41,14 +51,6 @@ export async function bootstrap(options: BootstrapOptions) {
   });
   
   app.use("/api/v1", createRouter({ service }));
-
-  await client.initialize({
-    processId: process.pid,
-    capabilities: { },
-    rootUri: `file://${prjPath}`,
-    rootPath: prjPath,
-    workspaceFolders: null,
-  }).wait();
 
   app.listen(options.port, () => {
     console.log(`Server successfully started listening on ${options.port} .`);
