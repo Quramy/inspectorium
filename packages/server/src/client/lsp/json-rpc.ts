@@ -31,10 +31,6 @@ export class JsonRpcStream extends Transform {
   private rest?: number;
   private buf?: Buffer;
 
-  constructor(options?: TransformOptions) {
-    super(options);
-  }
-
   _transform(chunk: Buffer, enc: string, cb: Function) {
     // console.log("raw:", chunk.toString());
     if (this.rest) {
