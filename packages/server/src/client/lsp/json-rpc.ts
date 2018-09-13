@@ -1,84 +1,73 @@
 import { Transform, TransformOptions } from "stream";
 
-export class ParseError extends Error {
-}
-
 export class JsonRpc {
   encode(args: object) {
     const payload = JSON.stringify({ ...args, jsonrpc: "2.0" })
     console.log("[send]", payload);
     return "Content-Length: " + payload.length + "\r\n\r\n" + payload
   }
+}
 
-  decode(msg: string) {
-    if (!msg.startsWith("Content-Length:")) {
-      return new ParseError("message should start with 'Content-Length:'");
-    }
-    const segments = msg.split("\r\n\r\n");
-    if (segments.length !== 2) {
-      return new ParseError("invalid format");
-    }
-    try {
-      return JSON.parse(segments[1].trim());
-    } catch (e) {
-      console.error("fail to parse", msg);
-      throw e;
-    }
+export class Encoder extends Transform {
+  _transform(chunk: Buffer, enc: string, cb: Function) {
+    const p = chunk.toString();
+    const msg = "Content-Length: " + p.length + "\r\n\r\n" + p;
+    console.log(msg);
+    this.push(p);
+    cb();
   }
 }
 
-export class JsonRpcStream extends Transform {
-  private rest?: number;
-  private buf?: Buffer;
+type Mode = "header" | "length" | "preBody" | "body" | null;
+
+export class Decoder extends Transform {
+  private mode: Mode = null;
+  private length = 0;
+  private buf = "";
 
   _transform(chunk: Buffer, enc: string, cb: Function) {
-    // console.log("raw:", chunk.toString());
-    if (this.rest) {
-      this.buf = this.buf ? Buffer.concat([this.buf, chunk]) : chunk;
-      if (chunk.length < this.rest) {
-        this.rest = this.rest - chunk.length;
-        return cb();
-      } else {
-        this.rest = 0;
-        this.push(this.buf);
-        this.buf = undefined;
-        return cb();
+    const msg = chunk.toString();
+    for (let i = 0; i < msg.length; i++) {
+      const c = msg[i];
+      if (!this.mode) {
+        if (c === "C") this.mode = "header"; 
+      }
+      if (this.mode === "header") {
+        if (this.buf === "Content-Length: ") {
+          this.mode = "length";
+          this.buf = "";
+        } else {
+          this.buf = this.buf + c;
+        }
+      }
+      if (this.mode === "length") {
+        const code = c.charCodeAt(0);
+        if (code < 48 || code > 57) {
+          this.mode = "preBody"; 
+          this.length = +this.buf;
+          this.buf = "";
+        } else {
+          this.buf = this.buf + c;
+        }
+      }
+      if (this.mode === "preBody") {
+        if (c === "{") {
+          this.mode = "body";
+        }
+      }
+      if (this.mode === "body") {
+        if (this.length - this.buf.length > msg.length - i) {
+          this.buf = this.buf + msg.slice(i);
+          break;
+        } else {
+          const p = this.buf + msg.slice(i, i + this.length - this.buf.length);
+          this.push(p);
+          i = i + this.length - this.buf.length;
+          this.buf = "";
+          this.mode = null;
+        }
       }
     }
-
-    while (true) {
-      const msg = chunk.toString();
-      const hit = msg.match(/Content-Length: (\d+)/);
-
-      if (hit) {
-        this.rest = +hit[1];
-        const offset = msg.indexOf("{");
-        // console.log(chunk.length, offset, this.rest);
-        if (offset === -1) {
-          break;
-        }
-        if (offset < chunk.length) {
-          if (chunk.length > offset + this.rest) {
-            this.push(chunk.slice(offset, offset + this.rest));
-            chunk = chunk.slice(offset + this.rest, chunk.length);
-            // console.log("continue", chunk.toString());
-            continue;
-          } else {
-            this.buf = chunk.slice(offset, chunk.length);
-          }
-        }
-        this.rest = this.rest - (chunk.length - offset);
-        if (this.rest <= 0) {
-          this.push(this.buf);
-          this.buf = undefined;
-          this.rest = 0;
-        }
-      } 
-      break;
-    }
-
-    return cb();
-
-    throw new Error("Invalid stream state " + chunk.toString());
+    cb();
   }
 }

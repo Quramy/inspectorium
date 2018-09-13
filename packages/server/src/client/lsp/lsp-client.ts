@@ -2,6 +2,7 @@ import fs from "fs";
 import cp from "child_process";
 import path from "path";
 import { EventEmitter } from "events";
+import { Writable } from "stream";
 import {
   InitializeParams,
   InitializeResult,
@@ -9,7 +10,7 @@ import {
   TextDocumentPositionParams,
   Definition,
 } from "vscode-languageserver-protocol";
-import { JsonRpc, JsonRpcStream } from "./json-rpc";
+import { JsonRpc,  Decoder } from "./json-rpc";
 
 export class LspClient extends EventEmitter {
   private reqId = 0;
@@ -20,8 +21,7 @@ export class LspClient extends EventEmitter {
     super();
     this.jsonRpc = new JsonRpc();
     this.languageServer = cp.spawn(command, args);
-    this.languageServer.stdout.pipe(new JsonRpcStream()).on("data", (buffer: Buffer) => {
-      console.log("buffer:", buffer.toString());
+    this.languageServer.stdout.pipe(new Decoder()).on("data", (buffer: Buffer) => {
       this.emit("data", JSON.parse(buffer.toString().trim()));
     });
   }
@@ -64,7 +64,7 @@ export class LspClient extends EventEmitter {
 
   private sendOneWay(msg: object) {
     const id = ++this.reqId;
-    this.languageServer.stdin.write(this.jsonRpc.encode({ ...msg }));
+    this.languageServer.stdin.write(this.jsonRpc.encode({ ...msg}));
     return { id, wait: () => Promise.resolve() };
   }
 }
