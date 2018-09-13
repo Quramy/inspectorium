@@ -1,8 +1,5 @@
-import fs from "fs";
 import cp from "child_process";
-import path from "path";
 import { EventEmitter } from "events";
-import { Writable } from "stream";
 import {
   InitializeParams,
   InitializeResult,
