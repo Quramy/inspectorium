@@ -47,6 +47,16 @@ export function defineActions(dispatcher: Dispatcher<AppState>) {
       });
     },
 
+    getHover(pos: DocumentPosition) {
+      const { owner, repository, ref, currentFile: filePath, endpoint } = getCurrentState();
+      dispatch(() => ({ ...getCurrentState(), hoverPosition: pos }));
+      chrome.runtime.sendMessage({ type: "getHover", params: { filePath, ref, endpoint, position: pos } }, (res: any) => {
+        const currentPos = getCurrentState().hoverPosition;
+        if (!currentPos || pos.line !== currentPos.line || pos.character !== currentPos.character) return;
+        console.log(res);
+      });
+    }
+
   };
 }
 

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { render } from "react-dom";
+import { debounce } from "lodash"
 
 import { DocumentRange } from "../types";
 import { UrlChangeObserver } from "./lib/url-change";
@@ -54,3 +55,36 @@ window.addEventListener("keyup", e => {
     actions.navigateToDefinition(pos);
   }
 });
+
+window.addEventListener("mousemove", debounce((e: MouseEvent) => {
+  const { x, y, offsetX } = e;
+  const n = document.elementFromPoint(x, y);
+  if (!n) return;
+  let target: Node | HTMLSpanElement | undefined;
+  let text: string | null = null;
+  if (n.classList.contains("js-file-line")) {
+    const td = n as HTMLTableColElement;
+    let afterSpan: HTMLSpanElement | undefined;
+    for (let n of td.childNodes) {
+      if (n.nodeName === "SPAN") {
+        if ((n as HTMLSpanElement).offsetLeft > offsetX) {
+          afterSpan = n as HTMLSpanElement;
+          break;
+        }
+      }
+    }
+    if (!afterSpan) return;
+    const textNode = afterSpan.previousSibling;
+    if (!textNode) return;
+    target = textNode;
+    text = textNode.nodeValue;
+  } else if(n.nodeName === "SPAN" && n.parentElement && n.parentElement.classList.contains("js-file-line")) {
+    target = n;
+    text = n.textContent;
+  }
+  if (!target || !text) return;
+  const pos = findPositionFromSelected(target as HTMLElement, text);
+  if (!pos) return;
+  console.log(pos, text);
+  actions.getHover(pos);
+}, 100));
