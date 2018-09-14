@@ -1,6 +1,7 @@
+import { DocumentPosition, DocumentRange } from "../types";
 import { Dispatcher } from "./lib/state-management";
 import { AppState } from "./app-state";
-import { DocumentPosition, DocumentRange } from "../types";
+import { execService } from "./lib/exec-service";
 
 export function defineActions(dispatcher: Dispatcher<AppState>) {
 
@@ -29,33 +30,31 @@ export function defineActions(dispatcher: Dispatcher<AppState>) {
       dispatch(() => ({ ...getCurrentState(), endpoint }));
     },
 
-    navigateToDefinition(pos: DocumentPosition) {
+    async navigateToDefinition(pos: DocumentPosition) {
       const { owner, repository, ref, currentFile: filePath, endpoint } = getCurrentState();
       console.log(filePath, ref, pos);
-      chrome.runtime.sendMessage({ type: "getDefinition", params: { filePath, ref, endpoint, position: pos } }, (res: { path: string, range: DocumentRange }[]) => {
-        console.log(res);
-        if (!res.length) {
-          // TODO handle empty result
-          return;
-        }
-        const { path, range } = res[0];
-        if (path === filePath) {
-          location.hash = `L${range.start.line + 1}`;
-        } else {
-          location.href= `/${owner}/${repository}/blob/${ref}/${path}` + "#" + `L${range.start.line + 1}`;
-        }
-      });
+      const res = await execService("getDefinition", { filePath, ref, endpoint, position: pos });
+      console.log(res);
+      if (!res.length) {
+        // TODO handle empty result
+        return;
+      }
+      const { path, range } = res[0];
+      if (path === filePath) {
+        location.hash = `L${range.start.line + 1}`;
+      } else {
+        location.href= `/${owner}/${repository}/blob/${ref}/${path}` + "#" + `L${range.start.line + 1}`;
+      }
     },
 
-    getHover(pos: DocumentPosition) {
+    async getHover(pos: DocumentPosition) {
       const { owner, repository, ref, currentFile: filePath, endpoint } = getCurrentState();
       dispatch(() => ({ ...getCurrentState(), hoverPosition: pos }));
-      chrome.runtime.sendMessage({ type: "getHover", params: { filePath, ref, endpoint, position: pos } }, (res: any) => {
-        const currentPos = getCurrentState().hoverPosition;
-        if (!currentPos || pos.line !== currentPos.line || pos.character !== currentPos.character) return;
-        console.log(res);
-      });
-    }
+      const res = await execService("getHover", { filePath, ref, endpoint, position: pos });
+      const currentPos = getCurrentState().hoverPosition;
+      if (!currentPos || pos.line !== currentPos.line || pos.character !== currentPos.character) return;
+      console.log(res);
+    },
 
   };
 }
