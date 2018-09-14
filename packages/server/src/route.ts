@@ -1,7 +1,7 @@
 import express from "express";
 import { InspectionService, NotSupportedCapabilityError } from "./service";
 
-function verfiyPostionRequest(req: express.Request, res: express.Response) {
+function verifyPostionRequest(req: express.Request, res: express.Response) {
   const line = +req.query.line;
   const character = +req.query.character;
   if (line < 0 || character < 0) {
@@ -40,7 +40,7 @@ export function createRouter({ service }: { service: InspectionService }) {
   const router = express.Router();
 
   router.get("/hover/*", async (req, res) => {
-    const pos = verfiyPostionRequest(req, res);
+    const pos = verifyPostionRequest(req, res);
     const filePath = verifyFilePathRequest(req, res);
     if (!pos) return;
     if (!filePath) return;
@@ -54,7 +54,7 @@ export function createRouter({ service }: { service: InspectionService }) {
   });
 
   router.get("/references/*", async (req, res) => {
-    const pos = verfiyPostionRequest(req, res);
+    const pos = verifyPostionRequest(req, res);
     const filePath = verifyFilePathRequest(req, res);
     if (!pos) return;
     if (!filePath) return;
@@ -68,7 +68,7 @@ export function createRouter({ service }: { service: InspectionService }) {
   });
 
   router.get("/definition/*", async (req, res) => {
-    const pos = verfiyPostionRequest(req, res);
+    const pos = verifyPostionRequest(req, res);
     const filePath = verifyFilePathRequest(req, res);
     if (!pos) return;
     if (!filePath) return;
