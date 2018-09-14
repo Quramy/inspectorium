@@ -15,7 +15,7 @@ export const services = {
   getHover: async (params: { endpoint: string, ref: string, filePath: string, position: DocumentPosition }): Promise<GetHoverResponse> => {
     const { endpoint, filePath, position } = params;
     const res = await fetch(`${endpoint}/api/v1/hover/${filePath}?line=${position.line}&character=${position.character}`);
-    return await res.json();
+    return await res.json() as GetHoverResponse;
   },
 
 };
