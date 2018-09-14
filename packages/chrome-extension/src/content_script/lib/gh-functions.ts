@@ -1,3 +1,4 @@
+
 export function findPositionFromSelected(node: HTMLElement, target: string): { line: number, character: number } | null {
   while (true) {
     if (!node.getAttribute) {

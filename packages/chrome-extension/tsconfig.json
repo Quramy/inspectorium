@@ -5,6 +5,12 @@
     "outDir": "built",
     "module": "es2015",
     "moduleResolution": "node",
-    "jsx": "react"
-  }
+    "jsx": "react",
+    "paths": {
+      "@inspectorium/schema": ["../schema/src/index.ts"]
+    }
+  },
+  "references": [
+    { "path": "../schema" }
+  ]
 }

@@ -1,4 +1,9 @@
 import express from "express";
+import {
+  GetHoverResponse,
+  GetReferencesResponse,
+  GetDefinitionResponse,
+} from "@inspectorium/schema"
 import { InspectionService, NotSupportedCapabilityError } from "./service";
 
 function verifyPostionRequest(req: express.Request, res: express.Response) {
@@ -39,15 +44,15 @@ export function createRouter({ service }: { service: InspectionService }) {
 
   const router = express.Router();
 
+  const sendResult = <T>(res: express.Response) => (result: T) => res.json(result).status(200).end();
+
   router.get("/hover/*", async (req, res) => {
     const pos = verifyPostionRequest(req, res);
     const filePath = verifyFilePathRequest(req, res);
     if (!pos) return;
     if (!filePath) return;
     try {
-      res.json(await service.getHover({ filePath, ...pos }));
-      res.statusCode = 200;
-      return res.end();
+      sendResult<GetHoverResponse>(res)(await service.getHover({ filePath, ...pos }));
     } catch (err) {
       handleServiceErrors(err, res);
     }
@@ -59,9 +64,7 @@ export function createRouter({ service }: { service: InspectionService }) {
     if (!pos) return;
     if (!filePath) return;
     try {
-      res.json(await service.getReferences({ filePath, ...pos }));
-      res.statusCode = 200;
-      return res.end();
+      sendResult<GetReferencesResponse>(res)(await service.getReferences({ filePath, ...pos }));
     } catch (err) {
       handleServiceErrors(err, res);
     }
@@ -73,9 +76,7 @@ export function createRouter({ service }: { service: InspectionService }) {
     if (!pos) return;
     if (!filePath) return;
     try {
-      res.json(await service.getDefinition({ filePath, ...pos }));
-      res.statusCode = 200;
-      return res.end();
+      sendResult<GetDefinitionResponse>(res)(await service.getDefinition({ filePath, ...pos }));
     } catch (err) {
       handleServiceErrors(err, res);
     }

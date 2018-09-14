@@ -1,5 +1,5 @@
 {
-  "name": "inspectorium-server",
+  "name": "@inspectorium/server",
   "version": "0.1.0",
   "description": "inspectorium server",
   "bin": {
@@ -20,6 +20,7 @@
     "typescript-language-server": "^0.3.2"
   },
   "dependencies": {
+    "@inspectorium/schema": "^0.1.0",
     "@types/express": "^4.16.0",
     "@types/minimist": "^1.2.0",
     "@types/node": "^10.9.4",

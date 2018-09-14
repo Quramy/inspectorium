@@ -34,7 +34,9 @@ export class InspectionService {
         textDocument: { uri },
         position: { line, character },
       }).wait();
-      return result;
+      if (!result) return { contents: [] };
+      if (!Array.isArray(result.contents)) return { contents: [result.contents] };
+      return { contents: result.contents || [] };
     } catch (err) {
       throw new InspectionError(err.message);
     }

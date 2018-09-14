@@ -1,4 +1,4 @@
-import { DocumentPosition, DocumentRange } from "../types";
+import { DocumentPosition, DocumentRange } from "@inspectorium/schema";
 import { Dispatcher } from "./lib/state-management";
 import { AppState } from "./app-state";
 import { execService } from "./lib/exec-service";
@@ -32,7 +32,6 @@ export function defineActions(dispatcher: Dispatcher<AppState>) {
 
     async navigateToDefinition(pos: DocumentPosition) {
       const { owner, repository, ref, currentFile: filePath, endpoint } = getCurrentState();
-      console.log(filePath, ref, pos);
       const res = await execService("getDefinition", { filePath, ref, endpoint, position: pos });
       console.log(res);
       if (!res.length) {

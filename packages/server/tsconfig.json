@@ -1,7 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "composite": true,
     "rootDir": "src",
-    "outDir": "built"
-  }
+    "outDir": "built",
+    "paths": {
+      "@inspectorium/schema": ["../schema/src/index.ts"]
+    },
+  },
+  "references": [
+    { "path": "../schema" }
+  ]
 }

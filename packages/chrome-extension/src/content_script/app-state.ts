@@ -1,4 +1,4 @@
-import { DocumentPosition } from "../types";
+import { DocumentPosition } from "@inspectorium/schema";
 
 export type AppState = {
   owner: string,

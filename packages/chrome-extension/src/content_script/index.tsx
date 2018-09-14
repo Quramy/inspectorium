@@ -1,8 +1,8 @@
 import * as React from "react";
 import { render } from "react-dom";
 import { debounce } from "lodash"
+import { DocumentRange } from "@inspectorium/schema";
 
-import { DocumentRange } from "../types";
 import { UrlChangeObserver } from "./lib/url-change";
 import { initStore } from "./lib/state-management";
 import { AppState } from "./app-state";
@@ -22,6 +22,7 @@ const { store, dispatcher } = initStore<AppState>({
   endpoint: "",
   currentFile: "",
   ref: "",
+  hoverPosition: null,
 });
 
 const actions = defineActions(dispatcher);

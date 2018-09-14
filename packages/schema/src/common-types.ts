@@ -1,3 +1,4 @@
+
 export type DocumentPosition = {
   line: number,
   character: number,
@@ -8,4 +9,7 @@ export type DocumentRange = {
   end: DocumentPosition,
 };
 
-
+export type MarkupContent = {
+  kind: string,
+  value: string,
+};
