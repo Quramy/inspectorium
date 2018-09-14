@@ -11,10 +11,10 @@ build:
       code: |
         HOME=$YARN_CACHE yarn --pure-lockfile
     - script:
-      name: bootstrap
+      name: build
       code: |
         yarn bootstrap
-        yarn run tsc -p packages/server
+        yarn build
     - script:
       name: test
       code: |

@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "bootstrap": "lerna bootstrap",
+    "build": "tsc -b packages/schema packages/server",
     "start": "node packages/server/built/cli.js",
     "test": "lerna run test"
   },

@@ -4,7 +4,7 @@
   "description": "",
   "typings": "built/index.d.ts",
   "scripts": {
-    "test": "nothing to do"
+    "test": "echo \"nothing to do\""
   },
   "keywords": [],
   "author": "Quramy",

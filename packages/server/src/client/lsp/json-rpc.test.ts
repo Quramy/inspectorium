@@ -61,7 +61,6 @@ describe("JsonRpcStream", () => {
       "\r\nContent-Length: " + payload2.length + "\r\n\r\n" + payload2;
     let callCount = 0;
     transformed.on("data", (d: Buffer) => {
-      console.log(d.toString());
       callCount++;
       if (callCount === 2) done();
     });
