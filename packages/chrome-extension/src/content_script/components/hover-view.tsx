@@ -7,7 +7,7 @@ import {
 
 type Props = {
   scrollTop: number,
-  hoverPoint: { x: number, y: number, height: number } | null,
+  hoverPoint: { x: number, y: number } | null,
   hoverContents: GetHoverResponse["contents"] | null,
 };
 
