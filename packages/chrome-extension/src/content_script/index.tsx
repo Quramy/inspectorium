@@ -10,9 +10,12 @@ import { defineActions } from "./actions";
 import { RepositoryConfigContainer } from "./containers/repository-config";
 import {
   getRepositoryInfoFromLocation,
+  tryMount,
   tryMountRepositoryConfigView,
   findPositionFromSelected,
+  findPositionFromCursor,
 } from "./lib/gh-functions";
+import { HoverViewContainer } from "./containers/hover-view";
 
 const urlChangeObserver = new UrlChangeObserver().start();
 
@@ -22,7 +25,10 @@ const { store, dispatcher } = initStore<AppState>({
   endpoint: "",
   currentFile: "",
   ref: "",
+  scrollTop: document.querySelector("html")!.scrollTop,
   hoverPosition: null,
+  hoverContents: null,
+  hoverPoint: null,
 });
 
 const actions = defineActions(dispatcher);
@@ -46,6 +52,13 @@ urlChangeObserver.onChangeUrl(e => {
   );
 });
 
+tryMount(hoverMountPoint => render(<HoverViewContainer store={store} actions={actions} />, hoverMountPoint));
+
+document.addEventListener("scroll", debounce(() => {
+  const scrollTop = document.querySelector("html")!.scrollTop;
+  actions.setScroll(scrollTop);
+}, 50));
+
 window.addEventListener("keyup", e => {
   // Ctrl + ]
   if (e.ctrlKey && e.keyCode === 221) {
@@ -58,34 +71,7 @@ window.addEventListener("keyup", e => {
 });
 
 window.addEventListener("mousemove", debounce((e: MouseEvent) => {
-  const { x, y, offsetX } = e;
-  const n = document.elementFromPoint(x, y);
-  if (!n) return;
-  let target: Node | HTMLSpanElement | undefined;
-  let text: string | null = null;
-  if (n.classList.contains("js-file-line")) {
-    const td = n as HTMLTableColElement;
-    let afterSpan: HTMLSpanElement | undefined;
-    for (let n of td.childNodes) {
-      if (n.nodeName === "SPAN") {
-        if ((n as HTMLSpanElement).offsetLeft > offsetX) {
-          afterSpan = n as HTMLSpanElement;
-          break;
-        }
-      }
-    }
-    if (!afterSpan) return;
-    const textNode = afterSpan.previousSibling;
-    if (!textNode) return;
-    target = textNode;
-    text = textNode.nodeValue;
-  } else if(n.nodeName === "SPAN" && n.parentElement && n.parentElement.classList.contains("js-file-line")) {
-    target = n;
-    text = n.textContent;
-  }
-  if (!target || !text) return;
-  const pos = findPositionFromSelected(target as HTMLElement, text);
-  if (!pos) return;
-  console.log(pos, text);
-  actions.getHover(pos);
+  const pos = findPositionFromCursor(e);
+  if (!pos) return actions.clearHover();
+  actions.getHover(pos, e.x, e.y);
 }, 100));

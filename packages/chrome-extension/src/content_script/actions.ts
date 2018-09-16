@@ -46,13 +46,25 @@ export function defineActions(dispatcher: Dispatcher<AppState>) {
       }
     },
 
-    async getHover(pos: DocumentPosition) {
+    setScroll(scrollTop: number) {
+      dispatch(() => ({ ...getCurrentState(), scrollTop }));
+    },
+
+    clearHover() {
+      dispatch(() => ({ ...getCurrentState(), hoverPosition: null, hoverContents: null, hoverPoint: null }));
+    },
+
+    async getHover(pos: DocumentPosition, x: number, y: number) {
       const { owner, repository, ref, currentFile: filePath, endpoint } = getCurrentState();
       dispatch(() => ({ ...getCurrentState(), hoverPosition: pos }));
       const res = await execService("getHover", { filePath, ref, endpoint, position: pos });
       const currentPos = getCurrentState().hoverPosition;
       if (!currentPos || pos.line !== currentPos.line || pos.character !== currentPos.character) return;
-      console.log(res);
+      if (!res.contents) {
+        dispatch(() => ({ ...getCurrentState(), hoverContents: null, hoverPoint: null }));
+      } else {
+        dispatch(() => ({ ...getCurrentState(), hoverContents: res.contents, hoverPoint: { x, y } }));
+      }
     },
 
   };

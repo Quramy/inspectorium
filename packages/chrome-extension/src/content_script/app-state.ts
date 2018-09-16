@@ -1,4 +1,7 @@
-import { DocumentPosition } from "@inspectorium/schema";
+import {
+  DocumentPosition,
+  GetHoverResponse,
+} from "@inspectorium/schema";
 
 export type AppState = {
   owner: string,
@@ -6,5 +9,8 @@ export type AppState = {
   currentFile: string,
   ref: string,
   endpoint: string,
+  scrollTop: number,
   hoverPosition: DocumentPosition | null,
+  hoverContents: GetHoverResponse["contents"] | null,
+  hoverPoint: { x: number, y: number } | null,
 };
