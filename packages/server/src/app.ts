@@ -52,6 +52,8 @@ export async function bootstrap(options: BootstrapOptions) {
   
   app.use("/api/v1", createRouter({ service }));
 
+  app.get("/", (req, res) => res.status(200).end());
+
   app.listen(options.port, () => {
     console.log(`Server successfully started listening on ${options.port} .`);
   });

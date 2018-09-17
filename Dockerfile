@@ -7,6 +7,6 @@ WORKDIR /var/repo
 RUN npm i -g yarn
 RUN yarn --pure-lockfile
 RUN yarn bootstrap
-RUN yarn run tsc -p packages/server
+RUN yarn build
 
 CMD ["yarn", "start"]
