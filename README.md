@@ -6,8 +6,8 @@ Inspect your GitHub source code.
 
 ## Components
 
-- inspectorium-server: A language HTTP server. It's a proxy of [Language Server Protocol](https://microsoft.github.io/language-server-protocol/). It exposes your repository sourcecode information to clients.
-- Chrome extension: A client of inspectorium-server. It communicates with the inspectorium-server and displays information of source code over GitHub UI.
+- [inspectorium-server](https://github.com/Quramy/inspectorium/blob/master/packages/server): A language HTTP server. It's a proxy of [Language Server Protocol](https://microsoft.github.io/language-server-protocol/). It exposes your repository sourcecode information to clients.
+- [Chrome extension](https://github.com/Quramy/inspectorium/blob/master/packages/chrome-extension): A client of inspectorium-server. It communicates with the inspectorium-server and displays information of source code over GitHub UI.
 
 ## Getting started
 
@@ -15,7 +15,7 @@ Inspect your GitHub source code.
 
 - Install [LSP implementation](https://microsoft.github.io/language-server-protocol/implementors/servers/) you want.
 - Install via `npm i @inspectorium/server`
-- Setup server config(See [packages/server/README.md](https://github.com/Quramy/inspectorium/blob/master/packages/server/package.json) also).
+- Setup server config(See [packages/server/README.md](https://github.com/Quramy/inspectorium/blob/master/packages/server/README.md) also).
 - Write Dockerfile for inspectorium-server and push it as Docker image.
 - Run the Docker image.
 
