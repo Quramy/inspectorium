@@ -9,7 +9,9 @@
     "build": "tsc",
     "test": "jest"
   },
-  "keywords": ["language server protovol"],
+  "keywords": [
+    "language server protovol"
+  ],
   "author": "Quramy",
   "license": "MIT",
   "devDependencies": {
