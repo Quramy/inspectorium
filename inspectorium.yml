@@ -1,4 +1,3 @@
-
 port: 4000
 languageServer:
   command: ./node_modules/.bin/typescript-language-server
