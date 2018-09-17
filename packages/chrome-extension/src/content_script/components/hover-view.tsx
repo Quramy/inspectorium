@@ -18,7 +18,8 @@ export const HoverView = (props: Props) => {
     if (typeof c === "string") return c;
     if (c.value) return c.value;
     return "";
-  }).join("\n");
+  }).filter(t => !!t).join("\n");
+  if (!text.trim()) return null;
   const top = hoverPoint.y + scrollTop - 10;
   return (
     <div style={{ position: "absolute", left: hoverPoint.x, top }}>

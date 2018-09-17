@@ -24,7 +24,7 @@ const { store, dispatcher } = initStore<AppState>({
   repository: "",
   endpoint: "",
   currentFile: "",
-  ref: "",
+  refference: "",
   scrollTop: document.querySelector("html")!.scrollTop,
   hoverPosition: null,
   hoverContents: null,
@@ -35,7 +35,7 @@ const actions = defineActions(dispatcher);
 
 urlChangeObserver.onChangeUrl(e => {
   const pathInfo = getRepositoryInfoFromLocation();
-  if (!pathInfo) return;
+  if (!pathInfo) return actions.clearRepoInfo();
   const { owner, repository, currentFile, ref } = store.getState()
   if (pathInfo.owner !== owner || repository !== repository) {
     const endpoint = localStorage.getItem(`${pathInfo.owner}/${pathInfo.repository}/endpoint`);
@@ -47,6 +47,7 @@ urlChangeObserver.onChangeUrl(e => {
   if (pathInfo.ref !== ref) {
     actions.changeRef(pathInfo.ref);
   }
+
   tryMountRepositoryConfigView(
     mountPoint => render(<RepositoryConfigContainer store={store} actions={actions} />, mountPoint)
   );

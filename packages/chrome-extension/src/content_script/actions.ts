@@ -10,10 +10,11 @@ export function defineActions(dispatcher: Dispatcher<AppState>) {
   return {
 
     initRepoInfo(owner: string, repository: string, endpoint: string) {
-      dispatch(() => {
-        console.log("initRepoInfo", getCurrentState());
-        return { ...getCurrentState(), owner, repository, endpoint };
-      });
+      dispatch(() => ({ ...getCurrentState(), owner, repository, endpoint }));
+    },
+
+    clearRepoInfo() {
+      dispatch(() => ({ ...getCurrentState(), owner: "", repository: "", refference: "" }));
     },
 
     changeCurrentFile(currentFile: string) {
@@ -21,7 +22,7 @@ export function defineActions(dispatcher: Dispatcher<AppState>) {
     },
 
     changeRef(ref: string) {
-      dispatch(() => ({ ...getCurrentState(), ref }));
+      dispatch(() => ({ ...getCurrentState(), refference: ref  }));
     },
 
     changeEndpoint(endpoint: string) {
@@ -31,7 +32,7 @@ export function defineActions(dispatcher: Dispatcher<AppState>) {
     },
 
     async navigateToDefinition(pos: DocumentPosition) {
-      const { owner, repository, ref, currentFile: filePath, endpoint } = getCurrentState();
+      const { owner, repository, refference: ref, currentFile: filePath, endpoint } = getCurrentState();
       const res = await execService("getDefinition", { filePath, ref, endpoint, position: pos });
       console.log(res);
       if (!res.length) {
@@ -55,9 +56,9 @@ export function defineActions(dispatcher: Dispatcher<AppState>) {
     },
 
     async getHover(pos: DocumentPosition, x: number, y: number) {
-      const { owner, repository, ref, currentFile: filePath, endpoint } = getCurrentState();
+      const { owner, repository, refference, currentFile: filePath, endpoint } = getCurrentState();
       dispatch(() => ({ ...getCurrentState(), hoverPosition: pos }));
-      const res = await execService("getHover", { filePath, ref, endpoint, position: pos });
+      const res = await execService("getHover", { filePath, ref: refference, endpoint, position: pos });
       const currentPos = getCurrentState().hoverPosition;
       if (!currentPos || pos.line !== currentPos.line || pos.character !== currentPos.character) return;
       if (!res.contents) {

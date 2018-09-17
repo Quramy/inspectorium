@@ -7,7 +7,7 @@ export type AppState = {
   owner: string,
   repository: string,
   currentFile: string,
-  ref: string,
+  refference: string,
   endpoint: string,
   scrollTop: number,
   hoverPosition: DocumentPosition | null,

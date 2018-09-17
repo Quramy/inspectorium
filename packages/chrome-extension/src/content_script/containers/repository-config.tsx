@@ -15,9 +15,7 @@ export class RepositoryConfigContainer extends React.Component<Props, AppState>{
   constructor(props: Props) {
     super(props);
     this.state = props.store.getState();
-    props.store.onStateChange(s => {
-      this.setState(s);
-    });
+    props.store.onStateChange(s => this.setState(s));
   }
 
   render() {
