@@ -5,11 +5,11 @@ metadata:
   labels:
     name: web
 spec:
+  type: NodePort 
   selector:
     name: web
-  type: LoadBalancer
   ports:
-    - port: 80
-      name: http
+    - port: 4000
       targetPort: 4000
+      protocol: TCP 
 
