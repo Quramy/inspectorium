@@ -46,8 +46,6 @@ deploy:
         envsubst < k8s/service.tmpl.yml > k8s/service.gen.yml
         envsubst < k8s/deployment.tmpl.yml > k8s/deployment.gen.yml
         envsubst < k8s/ingress.tmpl.yml > k8s/ingress.gen.yml
-        kubectl get services -l app=web -o json > deployment_scripts/services.json
-        python deployment_scripts/gen_ingress.py
     - script:
       name: auth
       code: |
@@ -61,3 +59,8 @@ deploy:
       command: apply -f k8s/deployment.gen.yml
     - kubectl:
       command: apply -f k8s/ingress.gen.yml
+    - script:
+      name: ingress-test
+      code: |
+        kubectl get services -l app=web -o json > deployment_scripts/services.json
+        python deployment_scripts/gen_ingress.py
