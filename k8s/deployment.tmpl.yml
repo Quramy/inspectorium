@@ -1,12 +1,14 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: web
+  name: web.${WERCKER_GIT_BRANCH}
 spec:
   replicas: 2
   selector:
     matchLabels:
-      name: web
+      app: web
+      name: web.${WERCKER_GIT_BRANCH}
+      suffix: ${WERCKER_GIT_BRANCH}
   strategy:
     type: RollingUpdate
   template:
