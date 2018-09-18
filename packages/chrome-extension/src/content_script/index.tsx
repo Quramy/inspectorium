@@ -36,7 +36,7 @@ const actions = defineActions(dispatcher);
 urlChangeObserver.onChangeUrl(e => {
   const pathInfo = getRepositoryInfoFromLocation();
   if (!pathInfo) return actions.clearRepoInfo();
-  const { owner, repository, currentFile, ref } = store.getState()
+  const { owner, repository, currentFile, refference: ref } = store.getState()
   if (pathInfo.owner !== owner || repository !== repository) {
     const endpoint = localStorage.getItem(`${pathInfo.owner}/${pathInfo.repository}/endpoint`);
     actions.initRepoInfo(pathInfo.owner, pathInfo.repository, endpoint || "");
@@ -48,10 +48,11 @@ urlChangeObserver.onChangeUrl(e => {
     actions.changeRef(pathInfo.ref);
   }
 
-  tryMountRepositoryConfigView(
-    mountPoint => render(<RepositoryConfigContainer store={store} actions={actions} />, mountPoint)
-  );
 });
+
+tryMountRepositoryConfigView(
+  mountPoint => render(<RepositoryConfigContainer store={store} actions={actions} />, mountPoint)
+);
 
 tryMount(hoverMountPoint => render(<HoverViewContainer store={store} actions={actions} />, hoverMountPoint));
 
