@@ -9,13 +9,13 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      name: web
+      branch: ${WERCKER_GIT_BRANCH}
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        name: web
+        branch: ${WERCKER_GIT_BRANCH}
     spec:
       containers:
         - name: web-lang-server
