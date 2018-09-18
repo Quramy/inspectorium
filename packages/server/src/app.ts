@@ -8,6 +8,8 @@ import { InspectionService } from "./service";
 export type BootstrapOptions = {
   port: number,
   projectRoot: string,
+  pathPrefix: string,
+  codeVersion: string,
   languageServer: {
     command: string,
     args: string[],
@@ -15,6 +17,8 @@ export type BootstrapOptions = {
 };
 
 export async function bootstrap(options: BootstrapOptions) {
+
+  console.log(JSON.stringify(options));
   
   const app = express();
   const prjPath = path.resolve(options.projectRoot);
@@ -50,7 +54,7 @@ export async function bootstrap(options: BootstrapOptions) {
     next();
   });
   
-  app.use("/api/v1", createRouter({ service }));
+  app.use(options.pathPrefix ? `/${options.pathPrefix}/api/v1` : "/api/v1", createRouter({ service }));
 
   app.get("/", (req, res) => res.status(200).end());
 

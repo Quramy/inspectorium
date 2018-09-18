@@ -39,8 +39,10 @@ function main() {
   }
 
   bootstrap({
-    port: 4000,
-    projectRoot: process.cwd(),
+    port: process.env.INSPECTORIUM_PORT || 4000,
+    projectRoot: process.env.INSPECTORIUM_PROJECT_ROOT || process.cwd(),
+    pathPrefix: process.env.INSPECTORIUM_PATH_PREFIX || "",
+    codeVersion: process.env.INSPECTORIUM_CODE_VER || "",
     ...config
   });
 

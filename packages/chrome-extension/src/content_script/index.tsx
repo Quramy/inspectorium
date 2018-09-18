@@ -48,11 +48,11 @@ urlChangeObserver.onChangeUrl(e => {
     actions.changeRef(pathInfo.ref);
   }
 
-});
+  tryMountRepositoryConfigView(
+    mountPoint => render(<RepositoryConfigContainer store={store} actions={actions} />, mountPoint)
+  );
 
-tryMountRepositoryConfigView(
-  mountPoint => render(<RepositoryConfigContainer store={store} actions={actions} />, mountPoint)
-);
+});
 
 tryMount(hoverMountPoint => render(<HoverViewContainer store={store} actions={actions} />, hoverMountPoint));
 
