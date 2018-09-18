@@ -62,5 +62,6 @@ deploy:
     - script:
       name: ingress-test
       code: |
+        gcloud components install kubectl -q --no-user-output-enabled
         kubectl get services -l app=web -o json > deployment_scripts/services.json
         python deployment_scripts/gen_ingress.py
