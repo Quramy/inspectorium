@@ -7,7 +7,6 @@ spec:
   selector:
     matchLabels:
       app: web
-      name: web.${WERCKER_GIT_BRANCH}
       suffix: ${WERCKER_GIT_BRANCH}
   strategy:
     type: RollingUpdate

@@ -4,7 +4,6 @@ metadata:
   name: web-${WERCKER_GIT_BRANCH}
   labels:
     app: web
-    name: web-${WERCKER_GIT_BRANCH}
     suffix: ${WERCKER_GIT_BRANCH}
 spec:
   type: NodePort 
