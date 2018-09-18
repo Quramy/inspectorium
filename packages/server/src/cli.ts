@@ -4,7 +4,7 @@ import minimist from "minimist";
 import fs from "fs";
 import { bootstrap } from "./app";
 
-function valiidateConf(conf: any) {
+function validateConfig(conf: any) {
   if (!conf.languageServer) {
     return { message: "key 'languageServer' is not set." };
   }
@@ -32,15 +32,17 @@ function main() {
   }
   const config = require("js-yaml").safeLoad(fs.readFileSync(configFilename, "utf8"));
 
-  const { message } = valiidateConf(config);
+  const { message } = validateConfig(config);
   if (message) {
     console.error(`Config file "${configFilename}":`, message);
     return process.exit(1);
   }
 
   bootstrap({
-    port: 4000,
-    projectRoot: process.cwd(),
+    port: process.env.INSPECTORIUM_PORT || 4000,
+    projectRoot: process.env.INSPECTORIUM_PROJECT_ROOT || process.cwd(),
+    pathPrefix: process.env.INSPECTORIUM_PATH_PREFIX || "",
+    codeVersion: process.env.INSPECTORIUM_CODE_VER || "",
     ...config
   });
 

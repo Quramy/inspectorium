@@ -1,13 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: web
+  name: web-${WERCKER_GIT_BRANCH}
   labels:
-    name: web
+    app: web
+    suffix: ${WERCKER_GIT_BRANCH}
 spec:
   type: NodePort 
   selector:
-    name: web
+    name: web.${WERCKER_GIT_BRANCH}
   ports:
     - port: 4000
       targetPort: 4000

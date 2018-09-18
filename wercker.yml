@@ -33,6 +33,7 @@ push_image:
       password: $GCP_JSON_KEY_FILE
       tag: latest, $WERCKER_GIT_COMMIT
       repository: asia.gcr.io/$GCP_PROJECT_NAME/inspectorium
+      env: INSPECTORIUM_PATH_PREFIX=$WERCKER_GIT_BRANCH INSPECTORIUM_CODE_VER=$WERCKER_GIT_COMMIT
       registry: https://asia.gcr.io/v2
 
 deploy:
