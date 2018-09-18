@@ -17,7 +17,3 @@ spec:
         backend:
           serviceName: web-master
           servicePort: 4000
-#     - path: /${WERCKER_GIT_BRANCH}
-#       backend:
-#         serviceName: web-${WERCKER_GIT_BRANCH}
-#         servicePort: 4000
