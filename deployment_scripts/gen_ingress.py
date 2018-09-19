@@ -4,7 +4,7 @@ import json
 
 contents = json.loads(open('deployment_scripts/services.json').read())
 
-rule_tmpl = '''      - path: /{branch}
+rule_tmpl = '''      - path: /{branch}/.*
         backend:
           serviceName: {name}
           servicePort: 4000'''
