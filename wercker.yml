@@ -40,22 +40,28 @@ deploy:
   box: google/cloud-sdk:alpine
   steps:
     - script:
-      name: prepare template
-      code: |
-        apk --no-cache add gettext
-        envsubst < k8s/service.tmpl.yml > k8s/service.gen.yml
-        envsubst < k8s/deployment.tmpl.yml > k8s/deployment.gen.yml
-        envsubst < k8s/ingress.tmpl.yml > k8s/ingress.gen.yml
-    - script:
-      name: auth
+      name: prepare gcloud
       code: |
         echo ${GCP_JSON_KEY_FILE} > ./key.json
         gcloud auth activate-service-account --key-file=./key.json
         gcloud config set project ${GCP_PROJECT_NAME}
+        gcloud components install kubectl -q --no-user-output-enabled
         gcloud container clusters get-credentials ${GKE_CLUSTER_NAME} --zone="${GKE_CLUSTER_ZONE}"
-    - kubectl:
-      command: apply -f k8s/service.gen.yml
+    - script:
+      name: prepare deployments template
+      code: |
+        apk --no-cache add gettext
+        envsubst < k8s/service.tmpl.yml > k8s/service.gen.yml
+        envsubst < k8s/deployment.tmpl.yml > k8s/deployment.gen.yml
     - kubectl:
       command: apply -f k8s/deployment.gen.yml
+    - kubectl:
+      command: apply -f k8s/service.gen.yml
+    - script:
+      name: prepare-loadbalancer
+      code: |
+        kubectl get services -l app=web -o json > deployment_scripts/services.json
+        kubectl get services -l app=web -o json > deployment_scripts/deployments.json
+        python deployment_scripts/gen_ingress.py > k8s/ingress.gen.yml
     - kubectl:
       command: apply -f k8s/ingress.gen.yml
