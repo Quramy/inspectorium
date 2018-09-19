@@ -4,10 +4,12 @@ import json
 
 contents = json.loads(open('deployment_scripts/services.json').read())
 
-rule_tmpl = '''      - path: /{branch}/.*
-        backend:
-          serviceName: {name}
-          servicePort: 4000'''
+rule_tmpl = '''  - host: {branch}.inspect.quramy.net
+    http:
+      paths:
+        - backend:
+            serviceName: {name}
+            servicePort: 4000'''
 
 specs = [
     rule_tmpl.format(

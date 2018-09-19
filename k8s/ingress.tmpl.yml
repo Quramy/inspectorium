@@ -7,13 +7,10 @@ metadata:
     # $ gcloud compute addresses create ingress-ip --global
     kubernetes.io/ingress.global-static-ip-name: ingress-ip
 spec:
-  backend:
-    serviceName: web-master
-    servicePort: 4000
   rules:
-  - http:
+  - host: master.inspect.quramy.net
+    http:
       paths:
-      - path: /master
-        backend:
-          serviceName: web-master
-          servicePort: 4000
+        - backend:
+            serviceName: web-master
+            servicePort: 4000
